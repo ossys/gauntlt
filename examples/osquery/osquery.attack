@@ -1,0 +1,26 @@
+@slow
+Feature: simple osquery attack (sanity check)
+
+  Background:
+    Given "osquery" is installed
+    And the following profile:
+      | name     | value     |
+      | hostname | localhost |
+
+  Scenario: Verify server is available
+    When I launch an "osquery" attack with:
+      """
+      SELECT pid, name, path FROM processes LIMIT 1;
+      """
+    Then the output should match:
+      """
+      +-----+-------------+------+
+      | pid | name        | path |
+      +-----+-------------+------+
+      | 0   | kernel_task |      |
+      +-----+-------------+------+
+      """
+    And the output should not match:
+      """
+      443/tcp\s+open
+      """

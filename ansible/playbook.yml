@@ -1,0 +1,28 @@
+---
+- hosts: aws
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Install pre-requisites
+      yum: state=present name="{{item}}"
+      with_items:
+        - git
+        - java-1.8.0-openjdk-devel.x86_64
+    - name: Remove old java
+      raw: sudo yum remove -y java-1.7.0-openjdk
+    - name: Clone HttpServer Repo
+      git:
+        repo: 'https://github.com/matthewglover/java_http_server.git'
+        dest: /home/ec2-user/java_http_server
+        update: yes
+    - name: Compile Server
+      shell: ./gradlew build && cp ./build/libs/HttpServer-1.0-SNAPSHOT.jar ./cob_spec/HttpServer.jar
+      args:
+        chdir: /home/ec2-user/java_http_server/
+      become: true
+    - name: Run Server in Background
+      shell: cd /home/ec2-user/java_http_server/cob_spec/; java -jar HttpServer.jar -p 8080 -d /home/ec2-user/java_http_server/cob_spec/public
+      async: 2592000               # 60*60*24*30 – 1 month
+      poll: 0
+      become: true

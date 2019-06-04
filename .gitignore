@@ -47,3 +47,6 @@ vendor/gruyere/source/stored-data.txt
 .pydevproject
 
 gauntlt.json
+
+# Terraform
+.terraform

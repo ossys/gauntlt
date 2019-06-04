@@ -1,13 +1,17 @@
-Feature: OS detection
+Feature: Verify the Apache service
+         is running according to STIG
+         compliance requirements
 
   Background:
     Given "nmap" is installed
     And the following profile:
       | name     | value      |
-      | hostname | scanme.nmap.org |
+      | hostname | localhost  |
 
   @slow
-  Scenario: Detect OS
+  Scenario: Verify Apache uses only
+            ports permitted in the
+            PPSM CAL (STIG V-69521)
     When I launch an "nmap" attack with:
       """
       nmap -sV -p80 -PN <hostname>

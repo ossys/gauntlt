@@ -33,7 +33,6 @@ module Gauntlt
         File.exists?(path) if path
       end
 
-  
     end
   end
 end

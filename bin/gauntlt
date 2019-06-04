@@ -54,4 +54,3 @@ elsif opts[:allsteps]
 else
   Gauntlt.attack( opts[:path], opts[:tags].join(','), opts[:format], opts[:outfile] )
 end
-
